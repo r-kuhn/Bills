@@ -23,22 +23,25 @@ func main() {
 	///Map of each person on the water bill
 	guys := map[string]float32{"Robbie": 0.0, "Jackson": 0.0, "Chris": 0.0, "Daniel": 0.0}
 
-	fmt.Println("Enter The Total Fixed Cost: ")
-
+	fmt.Println("Enter the total fixed cost: ")
 	// Takes the fixed costs from user input
 	fmt.Scanln(&b.FixedCosts)
 
+	fmt.Println("Enter the total variable cost: ")
 	// Takes the total variable cost from the users input
-	fmt.Scanln(&b.VariableCost)
+	fmt.Scanln(&b.VariableCosts)
 
+	fmt.Println("Enter the total number of billing days: ")
 	// Takes the total number of billing period days from the user
 	fmt.Scanln(&b.NumDays)
 
+	fmt.Println("Enter the number of days Robbie was there: ")
 	// Takes the number of days Robbie was at the house from the user
 	fmt.Scanln(&b.NumRobbieDays)
 
 	//Calculates the fixed cost per person and returns each persons value.
 	FixedCostPerPerson(b.FixedCosts, 4, guys)
+	VariableCostPerPerson(b.VariableCosts, b.NumDays, b.NumRobbieDays, guys)
 	fmt.Println(guys)
 
 }
@@ -54,6 +57,14 @@ func FixedCostPerPerson(fixed float32, NumPeople float32, guys map[string]float3
 }
 
 //VariableCostPerPerson calculates the amount each person pays of the variable water costs based on the amount of time spent at the house.
-// func VariableCostPerPerson(VariableCost int, NumDays int, NumRobbieDays int, guys map[string]int) {
+func VariableCostPerPerson(VariableCost float32, NumDays float32, NumRobbieDays float32, guys map[string]float32) map[string]float32 {
+	ChargePerDay := VariableCost / NumDays
+	PricePerDayRobbieThere := (ChargePerDay * NumRobbieDays) / 3
+	PricePerDayRobbieNotThere := (ChargePerDay * (NumDays - NumRobbieDays)) / 2
 
-// }
+	guys["Robbie"] = guys["Robbie"] + PricePerDayRobbieThere
+	guys["Jackson"] = guys["Jackson"] + PricePerDayRobbieThere + PricePerDayRobbieNotThere
+	guys["Chris"] = guys["Chris"] + PricePerDayRobbieThere + PricePerDayRobbieNotThere
+
+	return guys
+}
